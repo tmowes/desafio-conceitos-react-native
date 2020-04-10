@@ -19,6 +19,7 @@ export default function App() {
       setRepositories(response.data)
     })
   }, [])
+
   async function handleLikeRepository(id) {
     const response = await api.post(`repositories/${id}/like`)
     const likes = response.data.likes
@@ -42,8 +43,11 @@ export default function App() {
             <View style={styles.repositoryContainer}>
               <Text style={styles.repository}>{repository.title}</Text>
               <View style={styles.techsContainer}>
-                <Text style={styles.tech}>{repository.techs[0]}</Text>
-                <Text style={styles.tech}>{repository.techs[1]}</Text>
+                {repository.techs.map((tech) => (
+                  <Text key={tech} style={styles.tech}>
+                    {tech}
+                  </Text>
+                ))}
               </View>
               <View style={styles.likesContainer}>
                 <Text
