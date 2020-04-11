@@ -14,8 +14,11 @@ import api from './services/api'
 
 export default function App() {
   const [repositories, setRepositories] = useState([])
+  const [repository, setRepository] = useState([])
+
   useEffect(() => {
     api.get('repositories').then((response) => {
+      // console.log(response.data)
       setRepositories(response.data)
     })
   }, [])
@@ -32,6 +35,7 @@ export default function App() {
     })
     setRepositories(repositoriesUpdated)
   }
+
   return (
     <>
       <StatusBar barStyle='light-content' backgroundColor='#7159c1' />
@@ -43,17 +47,13 @@ export default function App() {
             <View style={styles.repositoryContainer}>
               <Text style={styles.repository}>{repository.title}</Text>
               <View style={styles.techsContainer}>
-                {repository.techs.map((tech) => (
-                  <Text key={tech} style={styles.tech}>
-                    {tech}
-                  </Text>
-                ))}
+                <Text style={styles.tech}>{repository.techs}</Text>
               </View>
               <View style={styles.likesContainer}>
                 <Text
                   style={styles.likeText}
                   testID={`repository-likes-${repository.id}`}>
-                  {repository.likes} curtidas
+                  {repository.likes} curtida{repository.likes > 1 ? 's' : ''}
                 </Text>
               </View>
               <TouchableOpacity
