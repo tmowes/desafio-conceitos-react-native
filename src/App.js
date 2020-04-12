@@ -10,18 +10,18 @@ import {
   TouchableOpacity,
 } from 'react-native'
 
+import LinearGradient from 'react-native-linear-gradient'
+
 import api from './services/api'
 
 export default function App() {
   const [repositories, setRepositories] = useState([])
-  const [repository, setRepository] = useState([])
 
   useEffect(() => {
     api.get('repositories').then((response) => {
-      // console.log(response.data)
       setRepositories(response.data)
     })
-  }, [])
+  }, [repositories])
 
   async function handleLikeRepository(id) {
     const response = await api.post(`repositories/${id}/like`)
@@ -47,7 +47,11 @@ export default function App() {
             <View style={styles.repositoryContainer}>
               <Text style={styles.repository}>{repository.title}</Text>
               <View style={styles.techsContainer}>
-                <Text style={styles.tech}>{repository.techs}</Text>
+                {repository.techs.map((tech) => (
+                  <Text key={tech} style={styles.tech}>
+                    {tech}
+                  </Text>
+                ))}
               </View>
               <View style={styles.likesContainer}>
                 <Text
@@ -60,7 +64,13 @@ export default function App() {
                 style={styles.button}
                 onPress={() => handleLikeRepository(repository.id)}
                 testID={`like-button-${repository.id}`}>
-                <Text style={styles.buttonText}>Curtir</Text>
+                <LinearGradient
+                  style={styles.gradient}
+                  colors={['#fff', '#7159c1', '#7159c1', '#7159c1', '#fff']}
+                  start={{ x: 0.3, y: 1 }}
+                  end={{ x: 0, y: 0 }}>
+                  <Text style={styles.buttonText}>{'   '}Curtir</Text>
+                </LinearGradient>
               </TouchableOpacity>
             </View>
           )}
@@ -80,6 +90,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     backgroundColor: '#fff',
     padding: 20,
+    borderRadius: 10,
   },
   repository: {
     fontSize: 32,
@@ -94,7 +105,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 10,
     backgroundColor: '#04d361',
+    borderRadius: 12,
     paddingHorizontal: 10,
+
     paddingVertical: 5,
     color: '#fff',
   },
@@ -116,7 +129,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 10,
     color: '#fff',
-    backgroundColor: '#7159c1',
     padding: 15,
+  },
+  gradient: {
+    borderRadius: 30,
   },
 })
