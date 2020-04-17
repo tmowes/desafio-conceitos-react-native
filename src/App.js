@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
 import {
   SafeAreaView,
@@ -8,32 +8,45 @@ import {
   StatusBar,
   StyleSheet,
   TouchableOpacity,
-} from 'react-native'
+} from 'react-native';
 
-import LinearGradient from 'react-native-linear-gradient'
+import LinearGradient from 'react-native-linear-gradient';
 
-import api from './services/api'
+import api from './services/api';
 
 export default function App() {
-  const [repositories, setRepositories] = useState([])
+  const [repositories, setRepositories] = useState([]);
 
   useEffect(() => {
-    api.get('repositories').then((response) => {
-      setRepositories(response.data)
-    })
-  }, [repositories])
+    api.get('repositories').then(response => {
+      setRepositories(response.data);
+    });
+  }, []);
+
+  // async function handleLikeRepository(id) {
+  //   const response = await api.post(`repositories/${id}/like`)
+  //   const likes = response.data.likes
+  //   const repositoriesUpdated = repositories.map((repository) => {
+  //     if (repository.id === id) {
+  //       return { ...repository, likes }
+  //     } else {
+  //       return repository
+  //     }
+  //   })
+  //   setRepositories(repositoriesUpdated)
+  // }
 
   async function handleLikeRepository(id) {
-    const response = await api.post(`repositories/${id}/like`)
-    const likes = response.data.likes
-    const repositoriesUpdated = repositories.map((repository) => {
+    const response = await api.post(`repositories/${id}/like`);
+    const likes = response.data.likes;
+    const repositoriesUpdated = repositories.map(repository => {
       if (repository.id === id) {
-        return { ...repository, likes }
+        return { ...repository, likes };
       } else {
-        return repository
+        return repository;
       }
-    })
-    setRepositories(repositoriesUpdated)
+    });
+    setRepositories(repositoriesUpdated);
   }
 
   return (
@@ -42,12 +55,12 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <FlatList
           data={repositories}
-          keyExtractor={(repository) => repository.id}
+          keyExtractor={repository => repository.id}
           renderItem={({ item: repository }) => (
             <View style={styles.repositoryContainer}>
               <Text style={styles.repository}>{repository.title}</Text>
               <View style={styles.techsContainer}>
-                {repository.techs.map((tech) => (
+                {repository.techs.map(tech => (
                   <Text key={tech} style={styles.tech}>
                     {tech}
                   </Text>
@@ -66,10 +79,16 @@ export default function App() {
                 testID={`like-button-${repository.id}`}>
                 <LinearGradient
                   style={styles.gradient}
-                  colors={['#fff', '#7159c1', '#7159c1', '#7159c1', '#fff']}
+                  colors={[
+                    '#FFFFFF',
+                    '#7159C1',
+                    '#7159C1',
+                    '#7159C1',
+                    '#FFFFFF',
+                  ]}
                   start={{ x: 0.3, y: 1 }}
                   end={{ x: 0, y: 0 }}>
-                  <Text style={styles.buttonText}>{'   '}Curtir</Text>
+                  <Text style={styles.buttonText}>Curtir</Text>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
@@ -77,7 +96,7 @@ export default function App() {
         />
       </SafeAreaView>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -134,4 +153,4 @@ const styles = StyleSheet.create({
   gradient: {
     borderRadius: 30,
   },
-})
+});
